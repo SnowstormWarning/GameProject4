@@ -94,21 +94,21 @@ namespace Tool.Sprites
             }
         }
 
-        public virtual void DrawWithWorldOffset(GameTime gameTime, SpriteBatch spriteBatch)
+        public virtual void DrawWithWorldOffset(GameTime gameTime, SpriteBatch spriteBatch, Vector2 WorldOffset)
         {
             switch (Direction)
             {
                 case Directions.Up:
-                    spriteBatch.Draw(_textureUp, Position-Game1.WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    spriteBatch.Draw(_textureUp, Position-WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
                     break;
                 case Directions.Right:
-                    spriteBatch.Draw(_textureLeft, Position - Game1.WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0);
+                    spriteBatch.Draw(_textureLeft, Position - WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipHorizontally, 0);
                     break;
                 case Directions.Down:
-                    spriteBatch.Draw(_textureUp, Position - Game1.WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipVertically, 0);
+                    spriteBatch.Draw(_textureUp, Position - WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.FlipVertically, 0);
                     break;
                 case Directions.Left:
-                    spriteBatch.Draw(_textureLeft, Position - Game1.WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    spriteBatch.Draw(_textureLeft, Position - WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
                     break;
             }
         }

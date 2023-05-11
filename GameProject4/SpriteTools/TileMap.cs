@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.Graphics;
 using SharpDX.DirectWrite;
 using System.Security.Policy;
 using GameProject4;
+using Tools.StateManagement;
+using Tool.Sprites;
 
 namespace Tools.Sprites
 {
@@ -17,6 +19,10 @@ namespace Tools.Sprites
         /// Dimensions of the tiles and map
         /// </summary>
         int _tileWidth, _tileHeight, _mapWidth, _mapHeight;
+
+        public int MapWidth => _mapWidth;
+
+        public int MapHeight => _mapHeight;
 
         /// <summary>
         /// The tileset texture
@@ -45,10 +51,11 @@ namespace Tools.Sprites
             _filename = filename;
         }
 
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ContentManager content, Level level, out List<int> redList, out int exitIndex)
         {
             string data = File.ReadAllText(Path.Join(content.RootDirectory, _filename));
             var lines = data.Split('\n');
+            redList = new List<int>();
 
             var tilesetFilename = lines[0].Trim();
             _tilesetTexture = content.Load<Texture2D>(tilesetFilename);
@@ -81,9 +88,24 @@ namespace Tools.Sprites
             {
                 _map[i] = int.Parse(fourthLine[i]);
             }
+            for(int i = 0; i < 4; i++)
+            {
+                redList.Add(int.Parse(lines[4+i]));
+            }
+            exitIndex = int.Parse(lines[8]);
+            if(lines.Length > 9)
+            {
+                string special = lines[9];
+                switch (special)
+                {
+                    case "darkness":
+                        level.DarknessMod = true;
+                        break;
+                }
+            }
         }
 
-        public void Draw(GameTime gameTime, SpriteBatch spriteBatch)
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 WorldOffset)
         {
             for (int y = 0; y < _mapHeight; y++)
             {
@@ -91,7 +113,27 @@ namespace Tools.Sprites
                 {
                     int index = _map[y * _mapWidth + x] - 1;
                     if (index == -1) continue;
-                    spriteBatch.Draw(_tilesetTexture, new Vector2(x * _tileWidth * Scale, y * _tileHeight * Scale) - Game1.WorldOffset, _tiles[index], Color.White, 0f, Vector2.Zero,Scale,SpriteEffects.None,0);
+                    spriteBatch.Draw(_tilesetTexture, new Vector2(x * _tileWidth * Scale, y * _tileHeight * Scale) - WorldOffset, _tiles[index], Color.White, 0f, Vector2.Zero,Scale,SpriteEffects.None,0);
+                }
+            }
+        }
+
+        public void Draw(GameTime gameTime, SpriteBatch spriteBatch, Vector2 WorldOffset, List<int> darknessRevealed, StaticSprite dark)
+        {
+            for (int y = 0; y < _mapHeight; y++)
+            {
+                for (int x = 0; x < _mapWidth; x++)
+                {
+                    int index = _map[y * _mapWidth + x] - 1;
+                    if (index == -1) continue;
+                    if (darknessRevealed.Contains(y * _mapWidth + x))
+                    {
+                        spriteBatch.Draw(_tilesetTexture, new Vector2(x * _tileWidth * Scale, y * _tileHeight * Scale) - WorldOffset, _tiles[index], Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    }
+                    else
+                    {
+                        //spriteBatch.Draw(dark.GetTexture(), new Vector2(x * _tileWidth * Scale, y * _tileHeight * Scale) - WorldOffset, _tiles[index], Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+                    }
                 }
             }
         }

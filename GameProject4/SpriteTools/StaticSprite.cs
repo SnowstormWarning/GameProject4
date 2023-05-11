@@ -56,9 +56,9 @@ namespace Tool.Sprites
             Draw(gameTime, spriteBatch, Color.White);
         }
 
-        public virtual void DrawWithWorldOffset(GameTime gameTime, SpriteBatch spriteBatch, Vector2 position)
+        public virtual void DrawWithWorldOffset(GameTime gameTime, SpriteBatch spriteBatch, Vector2 position, Vector2 WorldOffset)
         {
-            spriteBatch.Draw(_texture, position - Game1.WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(_texture, position - WorldOffset, null, Color.White, 0f, Vector2.Zero, Scale, SpriteEffects.None, 0);
         }
 
         public virtual void Draw(GameTime gameTime, SpriteBatch spriteBatch, Color color)

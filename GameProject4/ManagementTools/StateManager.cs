@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Xna.Framework;
 
 namespace Tools.StateManagement
 {
@@ -15,6 +16,7 @@ namespace Tools.StateManagement
         public static GraphicsDevice GraphicsDevice;
         public static bool CloseGame;
         public State CurrentState;
+        public static Game Game;
 
         public StateManager(GraphicsDevice graphicsDevice)
         {
@@ -45,6 +47,18 @@ namespace Tools.StateManagement
                 if (index > 0) CurrentState = states.ElementAt(index - 1); else CurrentState = states.ElementAt(states.Count - 1);
             }
             states.RemoveAt(index);
+        }
+
+        public void ReturnAndClear()
+        {
+            State state;
+            if(states.Count > 0)
+            {
+                state = states.ElementAt(0);
+                states.Clear();
+                states.Add(state);
+                CurrentState = states[0];
+            }
         }
 
         public void RemoveState(State state)

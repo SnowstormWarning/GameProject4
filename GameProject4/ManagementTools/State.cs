@@ -16,7 +16,8 @@ namespace Tools.StateManagement
     {
         None,
         RemoveSource,
-        AddTarget
+        AddTarget,
+        Clear
     }
 
     public abstract class State
